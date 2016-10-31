@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+from urllib.parse import urljoin
 
 import aiohttp
 from .exception import HTTP_EXCEPTIONS, TransportError
@@ -35,7 +36,7 @@ class Connection:
 
     @asyncio.coroutine
     def perform_request(self, method, url, params, body):
-        url = self._base_url + url
+        url = urljoin(self._base_url, url)
         resp = yield from self._session.request(
             method, url, params=params, data=body)
         resp_body = yield from resp.text()
